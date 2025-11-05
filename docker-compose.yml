@@ -1,0 +1,52 @@
+version: "3.9"
+
+services:
+  app:
+    build: .
+    container_name: clients-services-app
+    ports:
+      - "3000:3000"
+    environment:
+      NLS_LANG: AMERICAN_AMERICA.AL32UTF8
+      RAILS_ENV: development
+      DATABASE_URL: oracle://system:123456@oracle-xe:1521/XEPDB1
+    depends_on:
+      oracle:
+        condition: service_healthy
+    networks:
+      - factunet
+    volumes:
+      - .:/app
+
+  oracle:
+    image: container-registry.oracle.com/database/express:latest
+    container_name: oracle-xe
+    ports:
+      - "1521:1521"
+      - "5500:5500"
+    environment:
+      ORACLE_PWD: 123456
+      ORACLE_CHARACTERSET: AL32UTF8
+    volumes:
+      - ./init-db.sql:/opt/oracle/scripts/startup/01-create-pdb.sql
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "sqlplus",
+          "sys/123456@//localhost:1521/XE",
+          "as",
+          "sysdba",
+          "-S",
+          "SELECT 1 FROM dual;",
+        ]
+      interval: 20s
+      timeout: 10s
+      retries: 10
+      start_period: 120s
+    networks:
+      - factunet
+
+networks:
+  factunet:
+    driver: bridge

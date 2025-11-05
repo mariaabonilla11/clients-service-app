@@ -1,0 +1,27 @@
+# default: &default
+#   adapter: oracle_enhanced
+#   username: fmc_admin
+#   password: fmc_password
+#   host: localhost
+#   port: 1521
+#   service_name: factumarket_clients
+#   default_tablespaces:
+#     table: FACTUMARKET_DATA
+#     index: FACTUMARKET_DATA
+#     clob: FACTUMARKET_DATA
+
+default: &default
+  adapter: oracle_enhanced
+  username: system
+  password: 123456
+  host: localhost
+  port: 1521
+  database: XEPDB1
+development:
+  <<: *default
+
+test:
+  <<: *default
+
+production:
+  <<: *default
