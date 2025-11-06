@@ -69,13 +69,8 @@ Se debe descomprimir el archivo instantclient_linux.zip y ubicar la carpeta inst
 ### Construir imagen
 
 ```bash
-docker build -t clients-service-app .
-```
-
-### Ejecutar con Docker Compose
-
-```bash
-docker-compose up clients-service-app
+cd clients-service-app
+docker compose up --build
 ```
 
 ### 3. Configurar variables de entorno
