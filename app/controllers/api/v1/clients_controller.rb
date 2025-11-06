@@ -1,8 +1,6 @@
-require_relative '../../../use_cases'
 require_relative '../../../use_cases/clients/create_client'
 require_relative '../../../use_cases/clients/find_client'
 require_dependency Rails.root.join('app/infrastructure/repositories/oracle_client_repository').to_s
-require_dependency Rails.root.join('app/infrastructure/http/audit_service_client').to_s
 class Api::V1::ClientsController < ApplicationController
   def index
     clients = ::Client.where(state: "active")

@@ -1,8 +1,11 @@
+
+require_dependency Rails.root.join('app/infrastructure/http/audit_service').to_s
 module UseCases
   module Clients
     class FindClient
       def initialize(client_repository:)
         @client_repository = client_repository
+        @audit_client = Infrastructure::Http::AuditService.new
       end
 
       def execute(id)
@@ -15,7 +18,7 @@ module UseCases
         end
 
         # 3. Registrar auditoría de consulta
-        # register_audit_event(client)
+        register_audit_event(client)
 
         # 4. Retornar resultado
         build_success_response(client)
@@ -23,18 +26,23 @@ module UseCases
 
       private
 
-      # def register_audit_event(client)
-      #   @audit_client.register_event(
-      #     entity: 'client',
-      #     action: 'read',
-      #     entity_id: client.id,
-      #     metadata: {
-      #       identificacion: client.identificacion
-      #     }
-      #   )
-      # rescue => e
-      #   Rails.logger.error("Error registrando auditoría: #{e.message}")
-      # end
+      def register_audit_event(client)
+        @audit_client.create_audit(
+          entity: 'client',
+          action: 'read',
+          entity_id: client.id.to_s,
+          metadata: {
+            client_id: client.id,
+            name: client.name,
+            email: client.email,
+            identification: client.identification
+          }.to_json,
+          timestamp: Time.now.utc.iso8601,
+          service: 'clients-service'
+        )
+      rescue => e
+        Rails.logger.error("Error registrando auditoría: #{e.message}")
+      end
 
       def build_success_response(client)
         {

@@ -44,4 +44,4 @@ RUN gem install bundler && bundle install
 COPY . /app
 
 # Script de arranque
-ENTRYPOINT ["./docker-entrypoint.sh"]
+CMD ["bash", "-c", "sleep 5 && rm -f tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 3000 && sleep 5 && bundle exec rails db:migrate"]

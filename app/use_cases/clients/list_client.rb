@@ -33,14 +33,17 @@ module UseCases
         filtered
       end
 
-      def register_audit_event(count)
-        @auditoria_client.register_event(
+      def register_audit_event(client_count)
+        @audit_client.create_audit(
           entity: 'client',
           action: 'list',
-          entity_id: nil,
+          entity_id: 'bulk_list', # Operación masiva, no un cliente específico
           metadata: {
-            count: count
-          }
+            result_count: client_count,
+            operation: 'list_all_clients'
+          }.to_json,
+          timestamp: Time.now.utc.iso8601,
+          service: 'clients-service'
         )
       rescue => e
         Rails.logger.error("Error registrando auditoría: #{e.message}")

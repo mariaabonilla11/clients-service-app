@@ -10,6 +10,7 @@ services:
       NLS_LANG: AMERICAN_AMERICA.AL32UTF8
       RAILS_ENV: development
       DATABASE_URL: oracle://system:123456@oracle-xe:1521/XEPDB1
+      URL_AUDIT_SERVICE: http://192.168.1.22:3001
     depends_on:
       oracle:
         condition: service_healthy
