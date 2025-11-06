@@ -64,19 +64,26 @@ cd clients-service-app
 
 Se debe descomprimir el archivo instantclient_linux.zip y ubicar la carpeta instantclient_linux dentro de clients-service-app
 
-### 3. Ejecutar imagen y correr contenedor 🐳
+### 3. Configurar variables de entorno
+
+```bash
+Si se desea cambiar las credenciales de Oracle cambiar credenciales en docker-compose.yml y config/database.yml
+```
+
+```bash
+En el docker-compose.yml en el servicio app en la seccion de environment actualizar e indicar la IP local de su equipo
+    URL_AUDIT_SERVICE: http://192.168.1.22:3001
+
+Con ello se establece la comunicación con los demas microservicios
+```
+
+### 4. Ejecutar imagen y correr contenedor 🐳
 
 ### Construir imagen
 
 ```bash
 cd clients-service-app
 docker compose up --build
-```
-
-### 3. Configurar variables de entorno
-
-```bash
-Si se desea cambiar las credenciales de Oracle cambiar credenciales en docker-compose.yml y config/database.yml
 ```
 
 El servicio estará disponible en `http://IPLOCAL:3000`
